@@ -81,9 +81,84 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <link   href="css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  	<script src="https://code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
+    <link  href="css/bootstrap.min.css" rel="stylesheet">
     <script src="js/bootstrap.min.js"></script>
 </head>
+
+<script>
+	function validateForm() {
+	    var x = document.forms["myForm"]["fname"].value;
+	    if (x == null || x == "") {
+	        alert("Name must be filled out");
+	        return false;
+	    }
+	}
+</script>
+
+
+<script>
+	function pickStartDate(){
+	$('#pickStartDate input').datepicker({
+	    autoclose: true
+	});
+
+	$('#pickStartDate input').on('show', function(e){
+	    console.debug('show', e.date, $(this).data('stickyDate'));
+	    
+	    if ( e.date ) {
+	         $(this).data('stickyDate', e.date);
+	    }
+	    else {
+	         $(this).data('stickyDate', null);
+	    }
+	});
+
+	$('#pickStartDate input').on('hide', function(e){
+	    console.debug('hide', e.date, $(this).data('stickyDate'));
+	    var stickyDate = $(this).data('stickyDate');
+	    
+	    if ( !e.date && stickyDate ) {
+	        console.debug('restore stickyDate', stickyDate);
+	        $(this).datepicker('setDate', stickyDate);
+	        $(this).data('stickyDate', null);
+	    	}
+		});
+	};
+</script>
+
+
+<script>
+	function pickEndDate(){
+	$('#pickEndDate input').datepicker({
+	    autoclose: true
+	});
+
+	$('#pickEndDate input').on('show', function(e){
+	    console.debug('show', e.date, $(this).data('stickyDate'));
+	    
+	    if ( e.date ) {
+	         $(this).data('stickyDate', e.date);
+	    }
+	    else {
+	         $(this).data('stickyDate', null);
+	    }
+	});
+
+	$('#pickEndDate input').on('hide', function(e){
+	    console.debug('hide', e.date, $(this).data('stickyDate'));
+	    var stickyDate = $(this).data('stickyDate');
+	    
+	    if ( !e.date && stickyDate ) {
+	        console.debug('restore stickyDate', stickyDate);
+	        $(this).datepicker('setDate', stickyDate);
+	        $(this).data('stickyDate', null);
+	    	}
+		});
+	};
+</script>
+
 
 <body>
     <div class="container">
@@ -116,26 +191,29 @@
 					      	<?php endif; ?>
 					    </div>
 
-			<!-- start date -->
-					 <div class="control-group <?php echo !empty($startdateError)?'error':'';?>">
+<!-- start date -->
+					<div class="control-group <?php echo !empty($startdateError)?'error':'';?>">
 					    <label class="control-label">Start Date:</label>
 					    <div class="controls">
-					      	<input name="startdate" type="text"  placeholder="startdate" value="<?php echo !empty($startdate)?$startdate:'';?>">
-					      	<?php if (!empty($startdateError)): ?>
-					      		<span class="help-inline"><?php echo $startdateError;?></span>
-					      	<?php endif; ?>
-					    </div>
+					     	<div id="pickStartDate">
+						      	<input name="startdate" type="text"  placeholder="startdate" onclick="pickStartDate()" value="<?php echo !empty($startdate)?$startdate:'';?>">
+						      	<?php if (!empty($startdateError)): ?>
+						      		<span class="help-inline"><?php echo $startdateError;?></span>
+						      	<?php endif; ?>
+					      	</div>
+						</div>
 			<!-- end date -->
 
-					 <div class="control-group <?php echo !empty($enddateError)?'error':'';?>">
-					    <label class="control-label">End Date:</label>
-					    <div class="controls">
-					      	<input name="enddate" type="text"  placeholder="enddate" value="<?php echo !empty($enddate)?$enddate:'';?>">
-					      	<?php if (!empty($enddateError)): ?>
-					      		<span class="help-inline"><?php echo $enddateError;?></span>
-					      	<?php endif; ?>
-					    </div>
-					
+					 	<div class="control-group <?php echo !empty($enddateError)?'error':'';?>">
+					     <label class="control-label">End Date:</label>
+					    	<div class="controls">
+					    		<div id="pickEndDate">
+							      	<input name="enddate" type="text"  placeholder="enddate"  onclick="pickEndDate()"value="<?php echo !empty($enddate)?$enddate:'';?>">
+							      	<?php if (!empty($enddateError)): ?>
+							      		<span class="help-inline"><?php echo $enddateError;?></span>
+							      	<?php endif; ?>
+						     	</div>
+					   		 </div>
 
 					
 					  <div class="form-actions">
