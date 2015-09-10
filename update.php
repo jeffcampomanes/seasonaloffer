@@ -17,12 +17,18 @@
 		$advertiser= null;
 		$startdate= null;
 		$enddate= null;
+		$country= null;
+		$status= null;
+	
 		
 		// keep track post values
 		$offer= $_POST['offer'];
 		$advertiser= $_POST['advertiser'];
 		$startdate= $_POST['startdate'];
 		$enddate= $_POST['enddate'];
+		$country= $_POST['country'];
+		$status= $_POST['status'];
+	
 	
 		
 		// validate input
@@ -49,15 +55,28 @@
 			$enddateError = 'Please enter end date';
 			$valid = false;
 		}
+
+		$valid = true;
+		if (empty($country)) {
+			$countryError = 'Please enter end date';
+			$valid = false;
+		}
+
+		$valid = true;
+		if (empty($status)) {
+			$statusError = 'Please enter end date';
+			$valid = false;
+		}
+	
 	
 		
 		// update data
 		if ($valid) {
 			$pdo = Database::connect();
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			$sql = "UPDATE customers  set offer = ?, advertiser = ?, startdate = ?, enddate = ? WHERE id = ?";
+			$sql = "UPDATE customers  set offer = ?, advertiser = ?, startdate = ?, enddate = ?, country = ?, status = ?WHERE id = ?";
 			$q = $pdo->prepare($sql);
-			$q->execute(array($offer,$advertiser,$startdate,$enddate,$id));
+			$q->execute(array($offer,$advertiser,$startdate,$enddate,$country,$status,$id));
 			Database::disconnect();
 			header("Location: index.php");
 		}
@@ -72,6 +91,8 @@
 		$advertiser = $data['advertiser'];
 		$startdate = $data['startdate'];
 		$enddate = $data['enddate'];
+		$country = $data['country'];
+		$status = $data['status'];
 		Database::disconnect();
 	}
 ?>
@@ -191,29 +212,58 @@
 					      	<?php endif; ?>
 					    </div>
 
-<!-- start date -->
+		<!-- start date -->
 					<div class="control-group <?php echo !empty($startdateError)?'error':'';?>">
 					    <label class="control-label">Start Date:</label>
 					    <div class="controls">
 					     	<div id="pickStartDate">
-						      	<input name="startdate" type="text"  placeholder="startdate" onclick="pickStartDate()" value="<?php echo !empty($startdate)?$startdate:'';?>">
+						      	<input name="startdate" type="date"  placeholder="startdate" value="<?php echo !empty($startdate)?$startdate:'';?>">
 						      	<?php if (!empty($startdateError)): ?>
 						      		<span class="help-inline"><?php echo $startdateError;?></span>
 						      	<?php endif; ?>
 					      	</div>
 						</div>
+						
 			<!-- end date -->
 
 					 	<div class="control-group <?php echo !empty($enddateError)?'error':'';?>">
 					     <label class="control-label">End Date:</label>
 					    	<div class="controls">
 					    		<div id="pickEndDate">
-							      	<input name="enddate" type="text"  placeholder="enddate"  onclick="pickEndDate()"value="<?php echo !empty($enddate)?$enddate:'';?>">
+							      	<input name="enddate" type="date"  placeholder="enddate"  value="<?php echo !empty($enddate)?$enddate:'';?>">
 							      	<?php if (!empty($enddateError)): ?>
 							      		<span class="help-inline"><?php echo $enddateError;?></span>
 							      	<?php endif; ?>
 						     	</div>
 					   		 </div>
+					
+			<!-- country -->
+
+					 	<div class="control-group <?php echo !empty($countryError)?'error':'';?>">
+					     <label class="control-label">Country:</label>
+					    	<div class="controls">
+					    		<div id="pickEndDate">
+							      	<input name="country" type="text"  placeholder="country"  value="<?php echo !empty($country)?$country:'';?>">
+							      	<?php if (!empty($countryError)): ?>
+							      		<span class="help-inline"><?php echo $countryError;?></span>
+							      	<?php endif; ?>
+						     	</div>
+					   		 </div>
+							   		 
+
+			<!-- status -->
+
+					 	<div class="control-group <?php echo !empty($statusError)?'error':'';?>">
+					     <label class="control-label">Status:</label>
+					    	<div class="controls">
+					    		<div id="pickEndDate">
+							      	<input name="status" type="text"  placeholder="status"  value="<?php echo !empty($status)?$status:'';?>">
+							      	<?php if (!empty($statusError)): ?>
+							      		<span class="help-inline"><?php echo $statusError;?></span>
+							      	<?php endif; ?>
+						     	</div>
+					   		 </div>
+
 
 					
 					  <div class="form-actions">
